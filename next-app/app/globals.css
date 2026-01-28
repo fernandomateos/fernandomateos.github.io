@@ -1,0 +1,341 @@
+/* Basic reset and typography inspired by the original template.
+ * For a closer match, you can also copy rules from assets/css/main.css.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #fff;
+}
+
+/* Import key structural/animation pieces from the original template */
+
+body {
+  background: #1b1f22;
+}
+
+body.is-preload *,
+body.is-preload *::before,
+body.is-preload *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Background with dark overlay that fades away */
+#bg {
+  transform: scale(1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+}
+
+#bg::before,
+#bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Dark overlay (fades from black to transparent) */
+#bg::before {
+  transition: background-color 2.5s ease-in-out;
+  transition-delay: 0.75s;
+  background-image: linear-gradient(
+      to top,
+      rgba(19, 21, 25, 0.5),
+      rgba(19, 21, 25, 0.5)
+    );
+  background-size: auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 2;
+}
+
+#bg::after {
+  transform: scale(1.125);
+  transition: transform 0.325s ease-in-out, filter 0.325s ease-in-out;
+  background-image: url('/images/bg.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+body.is-preload #bg::before {
+  background-color: #000000;
+}
+
+/* Wrapper + header structure and text reveal */
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  padding: 4rem 2rem;
+  text-align: center;
+  z-index: 3;
+}
+
+#header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#header > * {
+  position: relative;
+  margin-top: 3.5rem;
+  transition: opacity 0.325s ease-in-out;
+}
+
+#header > *::before {
+  content: '';
+  position: absolute;
+  top: calc(-3.5rem - 1px);
+  left: calc(50% - 1px);
+  width: 1px;
+  height: calc(3.5rem + 1px);
+  background: #ffffff;
+}
+
+#header > :first-child {
+  margin-top: 0;
+}
+
+#header > :first-child::before {
+  display: none;
+}
+
+#header .content {
+  border-style: solid;
+  border-color: #ffffff;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  max-width: 100%;
+}
+
+#header .content .inner {
+  transition: max-height 0.75s ease, padding 0.75s ease, opacity 0.325s ease-in-out;
+  transition-delay: 0.25s;
+  padding: 3rem 2rem;
+  max-height: 40rem;
+  overflow: hidden;
+}
+
+#header .content .inner > :last-child {
+  margin-bottom: 0;
+}
+
+#header .content p {
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  font-size: 0.8rem;
+  line-height: 2;
+}
+
+/* Social icons row under the header */
+ul.icons {
+  cursor: default;
+  list-style: none;
+  padding-left: 0;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+ul.icons li a {
+  border-radius: 100%;
+  box-shadow: inset 0 0 0 1px #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+ul.icons li a:hover {
+  background-color: rgba(255, 255, 255, 0.075);
+}
+
+ul.icons li a .label {
+  display: none;
+}
+
+/* Header/nav styling */
+nav ul {
+  display: flex;
+  margin-bottom: 0;
+  list-style: none;
+  padding-left: 0;
+  border: solid 1px #ffffff;
+  border-radius: 4px;
+}
+
+nav ul li {
+  padding-left: 0;
+  border-left: solid 1px #ffffff;
+}
+
+nav ul li:first-child {
+  border-left: 0;
+}
+
+nav ul li a {
+  display: block;
+  min-width: 7.5rem;
+  height: 2.75rem;
+  line-height: 2.75rem;
+  padding: 0 1.25rem 0 1.45rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+nav ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.075);
+}
+
+/* Initial load state: line+text collapsed and dimmed */
+body.is-preload #header {
+  filter: blur(0.125rem);
+}
+
+body.is-preload #header > * {
+  opacity: 0;
+}
+
+body.is-preload #header .content .inner {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+}
+
+/* Main/article container */
+#main {
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  max-width: 100%;
+  z-index: 3;
+}
+
+#main article {
+  transform: translateY(0.25rem);
+  transition: opacity 0.325s ease-in-out, transform 0.325s ease-in-out;
+  padding: 4.5rem 2.5rem 1.5rem 2.5rem;
+  width: 40rem;
+  max-width: 100%;
+  background-color: rgba(27, 31, 34, 0.85);
+  border-radius: 4px;
+}
+
+article h2.major {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5rem;
+  border-bottom: solid 1px #ffffff;
+  padding-bottom: 0.5rem;
+  width: max-content;
+}
+
+article p {
+  line-height: 1.7;
+  margin: 0 0 1rem;
+}
+
+.blog-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+}
+
+.blog-list li + li {
+  margin-top: 1rem;
+}
+
+.blog-list a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.blog-list a:hover {
+  text-decoration: underline;
+}
+
+.blog-meta {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+#footer {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+#footer .copyright {
+  letter-spacing: 0.2rem;
+  font-size: 0.6rem;
+  opacity: 0.75;
+  margin-bottom: 0;
+  text-transform: uppercase;
+}
+
+body.is-preload #footer {
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  #wrapper {
+    padding: 2rem 1rem;
+  }
+
+  #main article {
+    padding: 3.5rem 2rem 0.5rem 2rem;
+  }
+
+  #header .content .inner {
+    padding: 2.5rem 1rem;
+  }
+
+  #header .content p {
+    line-height: 1.875;
+  }
+}
+
