@@ -1,6 +1,15 @@
 /* Basic reset and typography inspired by the original template.
  * For a closer match, you can also copy rules from assets/css/main.css.
  */
+:root {
+  --content-width: 70rem;
+  --article-bg: #ffffff;
+  --article-text: #2a2a2a;
+  --article-text-muted: #555;
+  --article-border: #ddd;
+  --article-link: #1565c0;
+  --article-link-hover: #0d47a1;
+}
 
 *,
 *::before,
@@ -8,13 +17,25 @@
   box-sizing: border-box;
 }
 
-html,
+html {
+  font-size: 18px;
+}
+
 body {
   margin: 0;
   padding: 0;
   height: 100%;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: #fff;
+}
+
+/* Links: light color for visibility on dark backgrounds */
+a {
+  color: #b8d4f0;
+}
+
+a:hover {
+  color: #e0ecfc;
 }
 
 /* Import key structural/animation pieces from the original template */
@@ -99,6 +120,8 @@ body.is-preload #bg::before {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  width: 100%;
+  max-width: var(--content-width);
 }
 
 #header > * {
@@ -130,7 +153,7 @@ body.is-preload #bg::before {
   border-color: #ffffff;
   border-top-width: 1px;
   border-bottom-width: 1px;
-  max-width: 100%;
+  width: 100%;
 }
 
 #header .content .inner {
@@ -145,10 +168,17 @@ body.is-preload #bg::before {
   margin-bottom: 0;
 }
 
+#header .content .inner h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  letter-spacing: 0.05em;
+}
+
 #header .content p {
   text-transform: uppercase;
   letter-spacing: 0.2rem;
-  font-size: 0.8rem;
+  font-size: 1rem;
   line-height: 2;
 }
 
@@ -169,9 +199,9 @@ ul.icons li a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  font-size: 0.8rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-decoration: none;
@@ -186,7 +216,11 @@ ul.icons li a .label {
   display: none;
 }
 
-/* Header/nav styling */
+/* Header/nav styling - equal-width items for aligned dividers */
+nav {
+  width: 100%;
+}
+
 nav ul {
   display: flex;
   margin-bottom: 0;
@@ -194,11 +228,14 @@ nav ul {
   padding-left: 0;
   border: solid 1px #ffffff;
   border-radius: 4px;
+  width: 100%;
 }
 
 nav ul li {
+  flex: 1;
   padding-left: 0;
   border-left: solid 1px #ffffff;
+  text-align: center;
 }
 
 nav ul li:first-child {
@@ -207,15 +244,15 @@ nav ul li:first-child {
 
 nav ul li a {
   display: block;
-  min-width: 7.5rem;
+  width: 100%;
   height: 2.75rem;
   line-height: 2.75rem;
-  padding: 0 1.25rem 0 1.45rem;
+  padding: 0 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   text-decoration: none;
-  color: inherit;
+  color: #fff;
 }
 
 nav ul li a:hover {
@@ -247,34 +284,51 @@ body.is-preload #header .content .inner {
   justify-content: center;
   flex-direction: column;
   position: relative;
-  max-width: 100%;
+  width: 100%;
+  max-width: var(--content-width);
   z-index: 3;
 }
 
 #main article {
   transform: translateY(0.25rem);
   transition: opacity 0.325s ease-in-out, transform 0.325s ease-in-out;
-  padding: 4.5rem 2.5rem 1.5rem 2.5rem;
-  width: 40rem;
-  max-width: 100%;
-  background-color: rgba(27, 31, 34, 0.85);
-  border-radius: 4px;
+  padding: 3rem 3.5rem 2.5rem;
+  width: 100%;
+  max-width: var(--content-width);
+  background-color: var(--article-bg);
+  color: var(--article-text);
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  text-align: left;
 }
 
 article h2.major {
   margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.5rem;
-  border-bottom: solid 1px #ffffff;
-  padding-bottom: 0.5rem;
+  letter-spacing: 0.35rem;
+  border-bottom: solid 2px var(--article-border);
+  padding-bottom: 0.75rem;
   width: max-content;
+  color: var(--article-text);
 }
 
 article p {
-  line-height: 1.7;
-  margin: 0 0 1rem;
+  line-height: 1.8;
+  margin: 0 0 1.25rem;
+  color: var(--article-text);
+  font-size: 1.1rem;
+}
+
+/* Links in article - dark theme for white box */
+article a:not(.button) {
+  color: var(--article-link);
+  text-decoration: underline;
+}
+
+article a:not(.button):hover {
+  color: var(--article-link-hover);
 }
 
 .blog-list {
@@ -288,18 +342,87 @@ article p {
 }
 
 .blog-list a {
-  color: #fff;
+  color: var(--article-link);
   text-decoration: none;
   font-weight: 600;
 }
 
 .blog-list a:hover {
+  color: var(--article-link-hover);
   text-decoration: underline;
 }
 
 .blog-meta {
+  font-size: 0.9rem;
+  color: var(--article-text-muted);
+}
+
+article h3 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--article-text);
+}
+
+article ul,
+article ol {
+  margin: 0.75rem 0 1.25rem;
+  padding-left: 1.75rem;
+  color: var(--article-text);
+}
+
+article ul li,
+article ol li {
+  margin-bottom: 0.5rem;
+}
+
+article blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--article-link);
+  background: rgba(21, 101, 192, 0.06);
+  font-style: italic;
+  color: var(--article-text);
+}
+
+article blockquote cite {
+  display: block;
+  margin-top: 0.75rem;
+  font-style: normal;
+  font-size: 0.9rem;
+  color: var(--article-text-muted);
+}
+
+article .button.primary {
+  display: inline-block;
+  padding: 0.875rem 1.75rem;
+  background: var(--article-link);
+  border: none;
+  border-radius: 6px;
+  color: #fff !important;
+  text-decoration: none !important;
+  text-transform: uppercase;
+  letter-spacing: 0.15rem;
   font-size: 0.85rem;
-  opacity: 0.7;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}
+
+article .button.primary:hover {
+  background: var(--article-link-hover);
+}
+
+.original-source {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--article-border);
+  font-size: 0.9rem;
+  color: var(--article-text-muted);
+}
+
+.original-source a {
+  color: var(--article-link);
+  text-decoration: underline;
 }
 
 #footer {
@@ -311,7 +434,7 @@ article p {
 
 #footer .copyright {
   letter-spacing: 0.2rem;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   opacity: 0.75;
   margin-bottom: 0;
   text-transform: uppercase;
@@ -323,11 +446,31 @@ body.is-preload #footer {
 
 @media (max-width: 768px) {
   #wrapper {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
+  }
+
+  #header,
+  #main {
+    max-width: 100%;
   }
 
   #main article {
-    padding: 3.5rem 2rem 0.5rem 2rem;
+    padding: 2rem 1.25rem 1.5rem;
+    max-width: 100%;
+  }
+
+  article h2.major {
+    font-size: 1.2rem;
+    letter-spacing: 0.2rem;
+  }
+
+  article h3 {
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+  }
+
+  article p {
+    font-size: 1.05rem;
   }
 
   #header .content .inner {
@@ -336,6 +479,25 @@ body.is-preload #footer {
 
   #header .content p {
     line-height: 1.875;
+  }
+
+  nav ul {
+    flex-wrap: wrap;
+  }
+
+  nav ul li {
+    flex: 1 1 calc(50% - 1px);
+    min-width: 6rem;
+  }
+
+  nav ul li:nth-child(odd) {
+    border-left: 0;
+  }
+
+  nav ul li a {
+    font-size: 0.8rem;
+    letter-spacing: 0.1rem;
+    padding: 0 0.35rem;
   }
 }
 

@@ -7,13 +7,13 @@ type Params = {
 };
 
 export function generateStaticParams() {
-  return getAllPosts('en').map((post) => ({
+  return getAllPosts('es').map((post) => ({
     slug: post.slug,
   }));
 }
 
-export default function BlogPostPage({ params }: { params: Params }) {
-  const post = getPostBySlug(params.slug, 'en');
+export default function BlogPostPageEs({ params }: { params: Params }) {
+  const post = getPostBySlug(params.slug, 'es');
 
   if (!post) {
     notFound();
@@ -26,23 +26,23 @@ export default function BlogPostPage({ params }: { params: Params }) {
           <div className="inner">
             <h1>{post.title}</h1>
             <p className="blog-meta">
-              {new Date(post.date).toLocaleDateString()} &middot; By Fernando Mateos-González
+              {new Date(post.date).toLocaleDateString('es-ES')} &middot; Por Fernando Mateos-González
             </p>
           </div>
         </div>
         <nav>
           <ul>
             <li>
-              <Link href="/">Home</Link>
+              <Link href="/es">Inicio</Link>
             </li>
             <li>
-              <Link href="/blog">Blog</Link>
+              <Link href="/es/blog">Blog</Link>
             </li>
             <li>
-              <Link href="/te-ayudo">Mentoring</Link>
+              <Link href="/es/te-ayudo">¿Te ayudo?</Link>
             </li>
             <li>
-              <Link href="/es/blog">Español</Link>
+              <Link href="/blog">English</Link>
             </li>
           </ul>
         </nav>
@@ -55,7 +55,7 @@ export default function BlogPostPage({ params }: { params: Params }) {
           ))}
           {post.originalSource && (
             <p className="original-source">
-              This post was first published on{' '}
+              Este artículo se publicó originalmente en{' '}
               <a href={post.originalSource} target="_blank" rel="noreferrer">
                 Bioblogia.net
               </a>
@@ -66,4 +66,3 @@ export default function BlogPostPage({ params }: { params: Params }) {
     </>
   );
 }
-

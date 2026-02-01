@@ -20,12 +20,8 @@ export default function RootLayout({
           {children}
           <footer id="footer">
             <p className="copyright">
-              &copy; Fernando Mateos-González. Design{' '}
-              <a href="https://html5up.net" target="_blank" rel="noreferrer">
-                HTML5 UP
-              </a>
-              .
-            </p>
+              &copy; Fernando Mateos-González. 
+                      </p>
           </footer>
         </div>
         <div id="bg" />

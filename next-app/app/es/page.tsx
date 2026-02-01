@@ -3,19 +3,13 @@
 import Link from 'next/link';
 import { MouseEvent, useState } from 'react';
 
-export default function HomePage() {
+export default function HomePageEs() {
   const [showAbout, setShowAbout] = useState(false);
 
   const handleHomeClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-
-    // Hide the about panel.
     setShowAbout(false);
-
-    // Scroll to the top.
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // Re-trigger the preload animation by toggling the body class.
     const body = document.body;
     body.classList.add('is-preload');
     window.setTimeout(() => {
@@ -26,7 +20,6 @@ export default function HomePage() {
   const handleAboutClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     setShowAbout(true);
-
     window.setTimeout(() => {
       const about = document.getElementById('about');
       if (about) {
@@ -41,19 +34,19 @@ export default function HomePage() {
         <div className="content">
           <div className="inner">
             <h1>Dr Fernando Mateos-González</h1>
-            <p>Field biologist, scientist, expedition leader</p>
+            <p>Biólogo, científico, guía de expediciones</p>
           </div>
         </div>
         <nav>
           <ul>
             <li>
               <a href="#home" onClick={handleHomeClick}>
-                Home
+                Inicio
               </a>
             </li>
             <li>
               <a href="#about" onClick={handleAboutClick}>
-                About
+                Sobre mí
               </a>
             </li>
             <li>
@@ -62,17 +55,17 @@ export default function HomePage() {
                 target="_blank"
                 rel="noreferrer"
               >
-                Research
+                Investigación
               </a>
             </li>
             <li>
-              <Link href="/blog">Blog</Link>
+              <Link href="/es/blog">Blog</Link>
             </li>
             <li>
-              <Link href="/te-ayudo">Mentoring</Link>
+              <Link href="/es/te-ayudo">¿Te ayudo?</Link>
             </li>
             <li>
-              <Link href="/es">Español</Link>
+              <Link href="/">English</Link>
             </li>
           </ul>
         </nav>
@@ -127,81 +120,83 @@ export default function HomePage() {
       <div id="main">
         {showAbout && (
           <article id="about">
-            <h2 className="major">About</h2>
+            <h2 className="major">Sobre mí</h2>
             <p>
-              Hey there! My name is Fernando Mateos-González, and you can blame me for everything
-              that doesn&apos;t work around this website.
+              ¡Hola! Me llamo Fernando Mateos-González, y puedes culparme de todo lo que no funcione
+              en esta web.
             </p>
             <p>
-              Ever since I can remember, I’ve been fascinated by nature, and that led me to study a
-              BSc in Biology at the{' '}
+              Desde que tengo memoria me ha fascinado la naturaleza, y eso me llevó a estudiar
+              Biología en la{' '}
               <a href="http://www.unex.es/" target="_blank" rel="noreferrer">
-                University of Extremadura
-              </a>{' '}
-              in Southern Spain, arguably one of the richest wildlife spots in Europe.
+                Universidad de Extremadura
+              </a>
+              , en el sur de España, posiblemente uno de los lugares más ricos en biodiversidad de
+              Europa.
             </p>
             <p>
-              After working for a while as a conservation biologist for both the private and civil
-              sectors, curiosity lured me to research, and I ended up completing an MSc in
-              Biodiversity and a PhD in Animal Behaviour at the{' '}
+              Después de trabajar como biólogo de la conservación en el sector privado y civil, la
+              curiosidad me llevó a la investigación y terminé con un máster en Biodiversidad y un
+              doctorado en Comportamiento Animal en la{' '}
               <a href="http://www.ub.edu/web/ub/es/index.html?" target="_blank" rel="noreferrer">
-                University of Barcelona
+                Universidad de Barcelona
               </a>{' '}
-              and the{' '}
+              y el{' '}
               <a href="http://museuciencies.cat/es/" target="_blank" rel="noreferrer">
-                Natural History Museum of Barcelona
-              </a>{' '}
-              (Spain). Then, as a fully fledged scientist, I worked for several years as a
-              postdoctoral researcher affiliated with the{' '}
-              <a href="https://www.ebc.uu.se/?languageId=1" target="_blank" rel="noreferrer">
-                Evolutionary Biology Centre in Uppsala (Sweden)
+                Museo de Ciencias Naturales de Barcelona
               </a>
-              , the{' '}
+              . Luego, como científico de pleno derecho, trabajé varios años como investigador
+              postdoctoral en el{' '}
+              <a href="https://www.ebc.uu.se/?languageId=1" target="_blank" rel="noreferrer">
+                Centro de Biología Evolutiva de Uppsala (Suecia)
+              </a>
+              , el{' '}
               <a
                 href="http://collectivebehaviour.com/people/mateos-gonzalez-fernando/"
                 target="_blank"
                 rel="noreferrer"
               >
-                Max Planck Institute for Ornithology (Germany)
+                Instituto Max Planck de Ornitología (Alemania)
               </a>{' '}
-              and the{' '}
+              y la{' '}
               <a href="http://www.sbs.utexas.edu/ryan/" target="_blank" rel="noreferrer">
-                University of Texas at Austin (USA)
+                Universidad de Texas en Austin (EE.UU.)
               </a>
               .
             </p>
             <p>
-              My scientific interests are broad: behaviour, evolution, conservation, climate
-              change… Lately, however, what decides where I go and what I do are mainly curiosity
-              and the chance of adventure. I have made my dream true and become a{' '}
+              Mis intereses científicos son amplios: comportamiento, evolución, conservación,
+              cambio climático… Pero últimamente lo que decide adónde voy y qué hago son la
+              curiosidad y la posibilidad de aventura. He cumplido mi sueño y me he convertido en
+              un{' '}
               <a
                 href="https://www.linkedin.com/in/fernandomateosgonzalez/"
                 target="_blank"
                 rel="noreferrer"
               >
-                nomadic mercenary biologist
+                biólogo mercenario nómada
               </a>
-              , offering my services only to the most interesting causes.
+              , ofreciendo mis servicios solo a las causas más interesantes.
             </p>
             <p>
-              My basecamp, and current main source of interesting work, is the Czech NGO{' '}
+              Mi base de operaciones y fuente principal de trabajo interesante es la ONG checa{' '}
               <a href="https://www.alkawildlife.eu/" target="_blank" rel="noreferrer">
                 ALKA Wildlife
               </a>
-              , an independent research team working for conservation through international
-              scientific projects.
+              , un equipo de investigación independiente que trabaja por la conservación a través de
+              proyectos científicos internacionales.
             </p>
             <p>
-              Thanks to this career I’ve been lucky to live and work in several countries in
-              Europe, America, Africa and Australia, doing amazing things like tracking lynx in the
-              snow, guiding expeditions in the Peruvian Amazon, canoeing down the Yukon River in
-              Canada, diving in Lake Tanganyika, exploring the island of Trinidad and even working
-              in the rainforest with the BBC for a Sir David Attenborough series.
+              Gracias a esta carrera he tenido la suerte de vivir y trabajar en varios países de
+              Europa, América, África y Australia, haciendo cosas increíbles como rastrear linces en
+              la nieve, guiar expediciones en la Amazonía peruana, hacer kayak por el río Yukón en
+              Canadá, bucear en el lago Tanganica, explorar Trinidad e incluso trabajar en la
+              selva con la BBC para una serie de Sir David Attenborough.
             </p>
             <p>
-              This fun life required a lot of luck and friends, a truckload of work and a bit of
-              studying… but the important thing is that it is possible. You can find amazing jobs as
-              a biologist, and that&apos;s why Bioblogia.net exists: to help you with your career.
+              Esta vida divertida requirió mucha suerte y amigos, un montón de trabajo y un poco de
+              estudio… pero lo importante es que es posible. Puedes encontrar trabajos increíbles
+              como biólogo, y por eso existe Bioblogia.net: para ayudarte con tu carrera.
             </p>
           </article>
         )}
@@ -209,4 +204,3 @@ export default function HomePage() {
     </>
   );
 }
-

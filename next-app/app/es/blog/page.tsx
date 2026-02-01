@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/posts';
 
-export default function BlogIndexPage() {
-  const posts = getAllPosts('en');
+export default function BlogIndexPageEs() {
+  const posts = getAllPosts('es');
 
   return (
     <>
@@ -10,19 +10,19 @@ export default function BlogIndexPage() {
         <div className="content">
           <div className="inner">
             <h1>Blog</h1>
-            <p>Short notes on field biology, science, and careers.</p>
+            <p>Notas sobre biología de campo, ciencia y carreras profesionales.</p>
           </div>
         </div>
         <nav>
           <ul>
             <li>
-              <Link href="/">Home</Link>
+              <Link href="/es">Inicio</Link>
             </li>
             <li>
-              <Link href="/te-ayudo">Mentoring</Link>
+              <Link href="/es/te-ayudo">¿Te ayudo?</Link>
             </li>
             <li>
-              <a href="https://www.bioblogia.net/p/english.html" target="_blank" rel="noreferrer">
+              <a href="https://www.bioblogia.net/" target="_blank" rel="noreferrer">
                 Bio
               </a>
             </li>
@@ -32,11 +32,11 @@ export default function BlogIndexPage() {
                 target="_blank"
                 rel="noreferrer"
               >
-                Research
+                Investigación
               </a>
             </li>
             <li>
-              <Link href="/es/blog">Español</Link>
+              <Link href="/blog">English</Link>
             </li>
           </ul>
         </nav>
@@ -44,14 +44,14 @@ export default function BlogIndexPage() {
 
       <div id="main">
         <article>
-          <h2 className="major">Posts</h2>
+          <h2 className="major">Entradas</h2>
           <ul className="blog-list">
             {posts.map((post) => (
               <li key={post.slug}>
                 <h3>
-                  <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                  <Link href={`/es/blog/${post.slug}`}>{post.title}</Link>
                 </h3>
-                <p className="blog-meta">{new Date(post.date).toLocaleDateString()}</p>
+                <p className="blog-meta">{new Date(post.date).toLocaleDateString('es-ES')}</p>
                 <p>{post.summary}</p>
               </li>
             ))}
@@ -61,4 +61,3 @@ export default function BlogIndexPage() {
     </>
   );
 }
-
