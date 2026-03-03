@@ -112,6 +112,7 @@ export default function HomePageEs() {
         {showAbout && (
           <article id="about">
             <h2 className="major">Sobre mí</h2>
+            <img src="/images/pic01.jpg" alt="Fernando Mateos-González" className="profile-photo" />
             <p>
               ¡Hola! Me llamo Fernando Mateos-González, y puedes culparme de todo lo que no funcione
               en esta web.
@@ -197,6 +198,10 @@ export default function HomePageEs() {
                 Las Biotapas
               </a>
               .
+            </p>
+            <p>
+              ¿Quieres escribirme?{' '}
+              <a href="mailto:fernando@bioblogia.net">fernando@bioblogia.net</a>
             </p>
           </article>
         )}

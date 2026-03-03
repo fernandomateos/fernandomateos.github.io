@@ -410,6 +410,16 @@ article .button.primary:hover {
   background: var(--article-link-hover);
 }
 
+.profile-photo {
+  display: block;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1.75rem;
+  border: 3px solid var(--article-border);
+}
+
 .original-source {
   margin-top: 2.5rem;
   padding-top: 1.25rem;

@@ -6,6 +6,9 @@ import { BodyWithPreload } from '@/components/BodyWithPreload';
 export const metadata: Metadata = {
   title: 'Dr Fernando Mateos-González',
   description: 'Field biologist, scientist, expedition leader',
+  icons: {
+    icon: '/images/ICON.png',
+  },
 };
 
 export default function RootLayout({

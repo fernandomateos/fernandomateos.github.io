@@ -119,6 +119,7 @@ export default function HomePage() {
         {showAbout && (
           <article id="about">
             <h2 className="major">About</h2>
+            <img src="/images/pic01.jpg" alt="Fernando Mateos-González" className="profile-photo" />
             <p>
               Hey there! My name is Fernando Mateos-González, and you can blame me for everything
               that doesn&apos;t work around this website.
@@ -198,6 +199,10 @@ export default function HomePage() {
                 Bioblogia.net
               </a>
               .
+            </p>
+            <p>
+              Want to get in touch?{' '}
+              <a href="mailto:fernando@bioblogia.net">fernando@bioblogia.net</a>
             </p>
           </article>
         )}
