@@ -60,12 +60,6 @@ export default function HomePageEs() {
               </a>
             </li>
             <li>
-              <Link href="/es/blog">Blog</Link>
-            </li>
-            <li>
-              <Link href="/es/te-ayudo">¿Te ayudo?</Link>
-            </li>
-            <li>
               <Link href="/">English</Link>
             </li>
           </ul>
@@ -193,7 +187,16 @@ export default function HomePageEs() {
             <p>
               Esta vida divertida requirió mucha suerte y amigos, un montón de trabajo y un poco de
               estudio… pero lo importante es que es posible. Puedes encontrar trabajos increíbles
-              como biólogo, y por eso existe Bioblogia.net: para ayudarte con tu carrera.
+              como biólogo. Si quieres saber cómo, escribo sobre carreras en biología y
+              comunicación científica en{' '}
+              <a href="https://www.bioblogia.net" target="_blank" rel="noreferrer">
+                Bioblogia.net
+              </a>
+              , y publico un boletín semanal llamado{' '}
+              <a href="https://biotapas.biologia.net" target="_blank" rel="noreferrer">
+                Las Biotapas
+              </a>
+              .
             </p>
           </article>
         )}

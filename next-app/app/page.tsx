@@ -67,12 +67,6 @@ export default function HomePage() {
               </a>
             </li>
             <li>
-              <Link href="/blog">Blog</Link>
-            </li>
-            <li>
-              <Link href="/te-ayudo">Mentoring</Link>
-            </li>
-            <li>
               <Link href="/es">Español</Link>
             </li>
           </ul>
@@ -198,7 +192,12 @@ export default function HomePage() {
             <p>
               This fun life required a lot of luck and friends, a truckload of work and a bit of
               studying… but the important thing is that it is possible. You can find amazing jobs as
-              a biologist, and that&apos;s why Bioblogia.net exists: to help you with your career.
+              a biologist. If you want to know how, I write about biology careers and science
+              communication at{' '}
+              <a href="https://www.bioblogia.net" target="_blank" rel="noreferrer">
+                Bioblogia.net
+              </a>
+              .
             </p>
           </article>
         )}
