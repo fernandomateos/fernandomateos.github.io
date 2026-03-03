@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { MouseEvent, useState } from 'react';
+import { FaLinkedinIn, FaXTwitter, FaInstagram, FaGithub } from 'react-icons/fa6';
 
 export default function HomePage() {
   const [showAbout, setShowAbout] = useState(false);
@@ -84,8 +85,7 @@ export default function HomePage() {
               rel="noreferrer"
               aria-label="LinkedIn"
             >
-              <span className="label">LinkedIn</span>
-              in
+              <FaLinkedinIn />
             </a>
           </li>
           <li>
@@ -95,8 +95,7 @@ export default function HomePage() {
               rel="noreferrer"
               aria-label="X (Twitter)"
             >
-              <span className="label">X</span>
-              X
+              <FaXTwitter />
             </a>
           </li>
           <li>
@@ -106,8 +105,7 @@ export default function HomePage() {
               rel="noreferrer"
               aria-label="Instagram @bioblogo"
             >
-              <span className="label">Instagram</span>
-              IG
+              <FaInstagram />
             </a>
           </li>
           <li>
@@ -117,8 +115,7 @@ export default function HomePage() {
               rel="noreferrer"
               aria-label="GitHub"
             >
-              <span className="label">GitHub</span>
-              GH
+              <FaGithub />
             </a>
           </li>
         </ul>
