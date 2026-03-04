@@ -119,7 +119,7 @@ export default function HomePage() {
         {showAbout && (
           <article id="about">
             <h2 className="major">About</h2>
-            <img src="/images/tanganyika.jpg" alt="Fernando Mateos-González" className="profile-photo" />
+            <img src="/images/cuzco.jpg" alt="Fernando Mateos-González" className="profile-photo" />
             <p>
               Hey there! My name is Fernando Mateos-González, and you can blame me for everything
               that doesn&apos;t work around this website.
