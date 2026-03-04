@@ -159,16 +159,16 @@ export default function HomePageEs() {
             <p>
               Mis intereses científicos son amplios: comportamiento, evolución, conservación,
               cambio climático… Pero últimamente lo que decide adónde voy y qué hago son la
-              curiosidad y la posibilidad de aventura. He cumplido mi sueño y me he convertido en
-              un{' '}
+              curiosidad y la posibilidad de aventura. Me he convertido en
+              una especie de{' '}
               <a
                 href="https://www.linkedin.com/in/fernandomateosgonzalez/"
                 target="_blank"
                 rel="noreferrer"
               >
-                biólogo mercenario nómada
+                biólogo nómada mercenario 
               </a>
-              , ofreciendo mis servicios solo a las causas más interesantes.
+              , ofreciendo mis servicios sólo a las causas más interesantes.
             </p>
             <p>
               Mi base de operaciones y fuente principal de trabajo interesante es la ONG checa{' '}
@@ -189,7 +189,7 @@ export default function HomePageEs() {
               Esta vida divertida requirió mucha suerte y amigos, un montón de trabajo y un poco de
               estudio… pero lo importante es que es posible. Puedes encontrar trabajos increíbles
               como biólogo. Si quieres saber cómo, escribo sobre carreras en biología y
-              comunicación científica en{' '}
+              medio ambiente en{' '}
               <a href="https://www.bioblogia.net" target="_blank" rel="noreferrer">
                 Bioblogia.net
               </a>
