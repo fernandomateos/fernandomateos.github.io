@@ -185,27 +185,27 @@ export default function HomePage() {
             </p>
             <p>
               Thanks to this career I’ve been lucky to live and work in several countries in
-              Europe, America, Africa and Australia, doing amazing things like{‘ ‘}
+              Europe, America, Africa and Australia, doing amazing things like{' '}
               <a href="https://www.instagram.com/p/Bfi9ZffFWR9/" target="_blank" rel="noreferrer">
                 tracking lynx in the snow
               </a>
-              , guiding{‘ ‘}
+              , guiding{' '}
               <a href="https://www.instagram.com/p/BckoAqDjUU0/" target="_blank" rel="noreferrer">
                 expeditions in the Peruvian Amazon
               </a>
-              ,{‘ ‘}
+              ,{' '}
               <a href="https://www.instagram.com/p/BoHZkGpH7do/" target="_blank" rel="noreferrer">
                 canoeing down the Yukon River in Canada
               </a>
-              ,{‘ ‘}
+              ,{' '}
               <a href="https://www.instagram.com/p/BPYdq4fj_RR/" target="_blank" rel="noreferrer">
                 diving in Lake Tanganyika
               </a>
-              ,{‘ ‘}
+              ,{' '}
               <a href="https://www.instagram.com/p/BiCkZJZHYKV/" target="_blank" rel="noreferrer">
                 exploring the island of Trinidad
               </a>
-              {‘ ‘}and even{‘ ‘}
+              {' '}and even{' '}
               <a href="https://www.instagram.com/p/BqYTnoVhHWR/" target="_blank" rel="noreferrer">
                 working in the rainforest with the BBC for a Sir David Attenborough series
               </a>
