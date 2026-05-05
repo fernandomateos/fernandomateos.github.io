@@ -180,10 +180,31 @@ export default function HomePageEs() {
             </p>
             <p>
               Gracias a esta carrera he tenido la suerte de vivir y trabajar en varios países de
-              Europa, América, África y Australia, haciendo cosas increíbles como rastrear linces en
-              la nieve, guiar expediciones en la Amazonía peruana, hacer kayak por el río Yukón en
-              Canadá, bucear en el lago Tanganica, explorar Trinidad e incluso trabajar en la
-              selva con la BBC para una serie de Sir David Attenborough.
+              Europa, América, África y Australia, haciendo cosas increíbles como{' '}
+              <a href="https://www.instagram.com/p/Bfi9ZffFWR9/" target="_blank" rel="noreferrer">
+                rastrear linces en la nieve
+              </a>
+              , guiar{' '}
+              <a href="https://www.instagram.com/p/BckoAqDjUU0/" target="_blank" rel="noreferrer">
+                expediciones en la Amazonía peruana
+              </a>
+              , hacer{' '}
+              <a href="https://www.instagram.com/p/BoHZkGpH7do/" target="_blank" rel="noreferrer">
+                kayak por el río Yukón en Canadá
+              </a>
+              ,{' '}
+              <a href="https://www.instagram.com/p/BPYdq4fj_RR/" target="_blank" rel="noreferrer">
+                bucear en el lago Tanganica
+              </a>
+              ,{' '}
+              <a href="https://www.instagram.com/p/BiCkZJZHYKV/" target="_blank" rel="noreferrer">
+                explorar Trinidad
+              </a>
+              {' '}e incluso{' '}
+              <a href="https://www.instagram.com/p/BqYTnoVhHWR/" target="_blank" rel="noreferrer">
+                trabajar en la selva con la BBC para una serie de Sir David Attenborough
+              </a>
+              .
             </p>
             <p>
               Esta vida divertida requirió mucha suerte y amigos, un montón de trabajo y un poco de
