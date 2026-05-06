@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import type { ReactNode } from 'react';
 import { BodyWithPreload } from '@/components/BodyWithPreload';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: 'Dr Fernando Mateos-González',
@@ -29,6 +30,7 @@ export default function RootLayout({
         </div>
         <div id="bg" />
       </BodyWithPreload>
+      <Analytics />
     </html>
   );
 }
