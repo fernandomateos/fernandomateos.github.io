@@ -25,7 +25,8 @@ fernandomateos.github.io/
     ├── lib/
     │   ├── posts.ts               ← 12 posts hardcoded en arrays TypeScript (no markdown)
     │   └── i18n.ts
-    └── public/images/             ← bg.jpg, tanganyika.jpg, cuzco.JPG, palo.JPG, ICON.png
+    ├── public/images/             ← bg.jpg, tanganyika.jpg, cuzco.JPG, palo.JPG, ICON.png
+    └── public/pater/              ← app de ejercicio de Pater (copia de github.com/fernandomateos/pater)
 ```
 
 ## Estado actual (mayo 2026)
@@ -94,6 +95,7 @@ fernandomateos.github.io/
 - GitHub: /fernandomateos
 
 ## Notas importantes
+- **`/pater` no se toca ni cambia de ruta** (20-oct-2026): es la app de ejercicio de Pater. `fernandomateos.com/pater` redirige a `/pater/index.html` (redirect en `next.config.mjs`) y sus datos viven en su móvil atados a esa dirección; si la ruta cambia o desaparece, pierde su historial. La fuente es el repositorio `pater`: tras cambiarla, se copian sus archivos a `next-app/public/pater/`.
 - La web antigua (`index.html`) debe mantenerse intacta — sirve como backup/referencia
 - Para añadir un post al blog: añadir objeto al array `posts` en `lib/posts.ts` (no se generan archivos, todo está en memoria)
 - Para migrar a markdown en el futuro: crear `content/blog/*.mdx` y actualizar `posts.ts` para leerlos con `fs.readFileSync`
