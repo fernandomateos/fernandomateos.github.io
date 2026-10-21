@@ -2,25 +2,27 @@
 
 // ---------- Plan (Nivel 1, 18-oct-2026) ----------
 
-const SERIES = 2;            // series por ejercicio de fuerza
 const DIAS_FUERZA = 3;       // días de fuerza por semana
 
+// series: objetivo de cada ejercicio. La hoja del Nivel 1 pedía 2 en todos; Pater hace
+// 3 cómodas de sentadilla, flexión y remo, y Nando las fija como punto de partida para
+// subir de nivel (21-oct-2026). Abdominales, 2 como la hoja: Pater hace 1.
 const EJ = {
   bici:       { nombre: 'Bici o paseo', icono: '🚲', modo: 'minutos' },
-  sentadilla: { nombre: 'Sentadillas', icono: '🦵', fuerza: true, min: 8, max: 10, pista: 'Con la silla detrás, sin bajar mucho' },
-  flexion:    { nombre: 'Flexiones en la mesa', icono: '💪', fuerza: true, min: 8, max: 12, pista: 'En la mesa, o en la pared si cuesta' },
-  remo:       { nombre: 'Remo con mancuerna', icono: '🏋️', fuerza: true, min: 8, max: 12, pista: 'Apoyado en la silla. Cada serie, con los dos brazos', kilos: true },
-  abdominal:  { nombre: 'Abdominales en la silla', icono: '🪑', fuerza: true, min: 8, max: 12, pista: '' },
+  sentadilla: { nombre: 'Sentadillas', icono: '🦵', fuerza: true, series: 3, min: 8, max: 10, pista: 'Con la silla detrás, sin bajar mucho' },
+  flexion:    { nombre: 'Flexiones en la mesa', icono: '💪', fuerza: true, series: 3, min: 8, max: 12, pista: 'En la mesa, o en la pared si cuesta' },
+  remo:       { nombre: 'Remo con mancuerna', icono: '🏋️', fuerza: true, series: 3, min: 8, max: 12, pista: 'Apoyado en la silla. Cada serie, con los dos brazos', kilos: true },
+  abdominal:  { nombre: 'Abdominales en la silla', icono: '🪑', fuerza: true, series: 2, min: 8, max: 12, pista: '' },
   barra:      { nombre: 'Colgarse de la barra', icono: '🙌', modo: 'segundos', pista: 'Agarre cómodo, pies cerca del suelo' }
 };
 const ORDEN = ['bici', 'sentadilla', 'flexion', 'remo', 'abdominal', 'barra'];
 
 // Lo que Pater hizo antes de tener la app (carta del 20-oct-2026, hora aproximada).
-// "completo": apuntado en total, sin series; cuenta como ejercicio hecho ese día.
+// Apuntado en total, sin series: dice que hubo fuerza ese día, no si se completaron las series.
 const PREVIOS = [
-  { id: 'carta-2026-10-20-sentadilla', t: Date.parse('2026-10-20T09:00:00+02:00'), tipo: 'sentadilla', reps: 30, completo: true },
-  { id: 'carta-2026-10-20-flexion', t: Date.parse('2026-10-20T09:00:01+02:00'), tipo: 'flexion', reps: 30, completo: true },
-  { id: 'carta-2026-10-20-remo', t: Date.parse('2026-10-20T09:00:02+02:00'), tipo: 'remo', reps: 24, completo: true }
+  { id: 'carta-2026-10-20-sentadilla', t: Date.parse('2026-10-20T09:00:00+02:00'), tipo: 'sentadilla', reps: 30, completo: true, origen: 'carta' },
+  { id: 'carta-2026-10-20-flexion', t: Date.parse('2026-10-20T09:00:01+02:00'), tipo: 'flexion', reps: 30, completo: true, origen: 'carta' },
+  { id: 'carta-2026-10-20-remo', t: Date.parse('2026-10-20T09:00:02+02:00'), tipo: 'remo', reps: 24, completo: true, origen: 'carta' }
 ];
 const FUERZA = ORDEN.filter(t => EJ[t].fuerza);
 
@@ -41,6 +43,13 @@ function cargar() {
 }
 
 let D = cargar();
+
+// Copia intacta del historial tal como estaba antes de esta versión, por si hiciera falta revisarlo.
+try {
+  const COPIA = CLAVE + '.copia-2026-10-21';
+  const antes = localStorage.getItem(CLAVE);
+  if (antes && !localStorage.getItem(COPIA)) localStorage.setItem(COPIA, antes);
+} catch (e) {}
 
 if (!D.previos) {
   const hay = new Set(D.registros.map(r => r.id));
@@ -92,9 +101,27 @@ function diaLargo(t) { return new Date(t).toLocaleDateString('es-ES', { day: 'nu
 function delDia(t) { return D.registros.filter(r => mismoDia(r.t, t)); }
 function entre(desde, hasta) { return D.registros.filter(r => r.t >= desde && r.t < hasta); }
 function deHoy(tipo) { return delDia(Date.now()).filter(r => r.tipo === tipo); }
-function series(rs) { return rs.filter(r => !r.completo).length; }
-function completa(rs) { return rs.some(r => r.completo) || rs.length >= SERIES; }
-function hecho(tipo) { const rs = deHoy(tipo); return EJ[tipo].fuerza ? completa(rs) : rs.length > 0; }
+
+// Procedencia: lo copiado de la carta no tiene series; lo demás se guardó con los botones.
+// Los registros antiguos de la carta no llevan "origen", pero sí "completo" y su id.
+function deCarta(r) { return r.origen === 'carta' || r.completo === true || String(r.id).startsWith('carta-'); }
+function deApp(rs) { return rs.filter(r => !deCarta(r)); }
+// Un apunte de la carta se solapa si ese mismo día y ejercicio hay series guardadas en la app:
+// puede ser la misma actividad contada dos veces. No se suma y se señala para revisar.
+function solapada(r) {
+  return deCarta(r) && D.registros.some(o => o.tipo === r.tipo && !deCarta(o) && mismoDia(o.t, r.t));
+}
+function contables(rs) { return rs.filter(r => !solapada(r)); }
+
+function series(rs) { return deApp(rs).length; }
+// Completo solo con las series del objetivo de ese ejercicio guardadas una a una.
+function completa(tipo, rs) { return series(rs) >= EJ[tipo].series; }
+function hecho(tipo) {
+  const rs = deHoy(tipo);
+  if (!EJ[tipo].fuerza) return rs.length > 0;
+  return completa(tipo, rs) || (rs.length > 0 && rs.every(deCarta));
+}
+function listaReps(rs) { return deApp(rs).map(r => r.reps).join(' + '); }
 function hizoFuerza(t) { return delDia(t).some(r => EJ[r.tipo] && EJ[r.tipo].fuerza); }
 
 // Fuerza toca si esta semana lleva menos de 3 días y ayer no hubo fuerza.
@@ -116,15 +143,22 @@ function estadoHoy(tipo) {
   if (tipo === 'bici') return '✓ ' + rs.reduce((s, r) => s + r.min, 0) + ' min';
   if (tipo === 'barra') return '✓ ' + Math.max(...rs.map(r => r.seg)) + ' s';
   const n = series(rs);
-  if (!n) return '✓ ' + rs.reduce((s, r) => s + r.reps, 0) + ' rep.';
-  return (completa(rs) ? '✓ ' : '') + n + (n === 1 ? ' serie' : ' series');
+  if (!n) return '✓ ' + rs.reduce((s, r) => s + r.reps, 0) + ' rep. (carta)';
+  return (completa(tipo, rs) ? '✓ ' : '') + n + ' de ' + EJ[tipo].series;
 }
 
 function describir(r) {
   const e = EJ[r.tipo];
   if (r.tipo === 'bici') return e.icono + ' ' + e.nombre + ': ' + r.min + ' minutos';
   if (r.tipo === 'barra') return e.icono + ' ' + e.nombre + ': ' + r.seg + ' segundos';
-  return e.icono + ' ' + e.nombre + ': ' + r.reps + ' repeticiones' + (r.kg ? ' con ' + kg(r.kg) : '');
+  if (deCarta(r)) return e.icono + ' ' + e.nombre + ': ' + r.reps + ' repeticiones en total, apuntadas de la carta';
+  return e.icono + ' ' + e.nombre + ': una serie de ' + r.reps + ' repeticiones' + (r.kg ? ' con ' + kg(r.kg) : '');
+}
+
+function faltan(tipo) {
+  const n = EJ[tipo].series - series(deHoy(tipo));
+  if (n <= 0) return 'Ya están las ' + EJ[tipo].series + ' series de hoy';
+  return n === 1 ? 'Te falta 1 serie' : 'Te faltan ' + n + ' series';
 }
 
 function kg(n) { return String(n).replace('.', ',') + ' kg'; }
@@ -159,6 +193,7 @@ function pintar() {
   else app.innerHTML = vistaInicio();
   tic();
   window.scrollTo(0, 0);
+  recargarSiToca();
 }
 
 function volver() { return '<button class="volver" data-accion="inicio">← Volver</button>'; }
@@ -184,7 +219,7 @@ function vistaInicio() {
     const e = EJ[sig];
     h += '<div class="ahora"><p class="etiqueta">AHORA</p>' +
       '<p class="que">' + e.icono + ' ' + e.nombre + '</p>' +
-      (e.fuerza ? '<p class="cuanto">' + SERIES + ' series de ' + e.min + ' a ' + e.max + '</p>' : '') +
+      (e.fuerza ? '<p class="cuanto">' + e.series + ' series de ' + e.min + ' a ' + e.max + '</p>' : '') +
       boton('▶ Vamos', 'abrir', 'verde centro grande', ' data-tipo="' + sig + '"') + '</div>';
   } else {
     h += '<div class="ahora fin"><p class="que">¡Hoy está todo hecho, Pater! 🎉</p></div>';
@@ -206,18 +241,47 @@ function vistaInicio() {
 
 // --- Fuerza ---
 
+// Lo que acaba de guardarse: se queda a la vista hasta salir de la pantalla.
+function confirmacion(tipo) {
+  const r = D.registros.find(x => x.id === estado.guardada);
+  if (!r) return '';
+  const hoy = deApp(deHoy(tipo));
+  const n = hoy.indexOf(r) + 1;
+  return '<div class="guardada" role="status"><p class="g1">✓ Guardada la serie ' + n + ' de ' + EJ[tipo].series + '</p>' +
+    '<p class="g2">' + r.reps + ' repeticiones' + (r.kg ? ' con ' + kg(r.kg) : '') + '</p>' +
+    '<p class="g3">' + faltan(tipo) + '</p></div>';
+}
+
+// Las series de hoy, una por línea, cada una con su arreglo.
+function seriesDeHoy(tipo) {
+  const hoy = deApp(deHoy(tipo));
+  if (!hoy.length) return '';
+  let h = '<div class="series-hoy"><p class="suma">Hoy: ' + listaReps(hoy) + '</p>';
+  hoy.forEach((r, i) => {
+    h += '<div class="fila-serie"><span>Serie ' + (i + 1) + ': <b>' + r.reps + '</b>' + (r.kg ? ' · ' + kg(r.kg) : '') + '</span>' +
+      '<button data-accion="corregir" data-id="' + r.id + '">Cambiar</button>' +
+      '<button data-accion="quitar" data-id="' + r.id + '">Borrar</button></div>';
+  });
+  return h + '<p class="nota">¿Te has equivocado? Cambia el número de esa serie; no la guardes otra vez.</p></div>';
+}
+
 function vistaFuerza(tipo) {
   const e = EJ[tipo];
-  if (estado.listo) return vistaListo(tipo, e.nombre + ': hechas las ' + SERIES + ' series', '');
+  if (estado.listo) {
+    const r = D.registros.find(x => x.id === estado.guardada);
+    return vistaListo(tipo, 'Guardada la serie ' + e.series + ' de ' + e.series + (r ? ': ' + r.reps + ' repeticiones' : ''),
+      e.nombre + ' de hoy: ' + listaReps(deHoy(tipo)), boton('Ver o corregir las series', 'ver-series', 'claro centro'));
+  }
   if (estado.reps == null) estado.reps = D.reps[tipo] || 10;
   const hoy = deHoy(tipo);
   const n = series(hoy) + 1;
   let h = volver();
   h += '<h1>' + e.icono + ' ' + e.nombre + '</h1>';
   if (e.pista) h += '<p class="pista">' + e.pista + '</p>';
-  h += '<p class="serie">' + (completa(hoy) ? 'Hoy ya está hecho ✓<br>Serie de propina' : 'Serie ' + n + ' de ' + SERIES) + '</p>';
-  h += '<p class="objetivo">Haz de ' + e.min + ' a ' + e.max + '</p>';
-  h += '<p class="rotulo">Repeticiones</p>';
+  h += confirmacion(tipo);
+  h += '<p class="serie">' + (completa(tipo, hoy) ? 'Hoy ya están las ' + e.series + ' series ✓<br>Si haces otra, es de propina' : 'Ahora: serie ' + n + ' de ' + e.series) + '</p>';
+  h += '<p class="objetivo">' + e.series + ' series de ' + e.min + ' a ' + e.max + ' repeticiones</p>';
+  h += '<p class="rotulo">Repeticiones de esta serie<small>Solo las de esta serie, no las de todo el ejercicio</small></p>';
   h += '<div class="contador"><button data-accion="reps" data-paso="-1" aria-label="Menos">−</button>' +
     '<span class="valor">' + estado.reps + '</span>' +
     '<button data-accion="reps" data-paso="1" aria-label="Más">+</button></div>';
@@ -227,17 +291,19 @@ function vistaFuerza(tipo) {
       '<span class="valor">' + String(D.kilos).replace('.', ',') + '</span>' +
       '<button data-accion="kilos" data-paso="0.5" aria-label="Más kilos">+</button></div>';
   }
-  h += boton('✓ Serie hecha', 'serie', 'verde centro grande', ' data-tipo="' + tipo + '"');
-  if (hoy.length) h += '<p class="hoy-series">Hoy: ' + hoy.map(r => r.reps).join(' + ') + ' repeticiones</p>';
+  h += boton('✓ Guardar esta serie', 'serie', 'verde centro grande', ' data-tipo="' + tipo + '"');
+  h += '<p class="ayuda">Pulsa una vez cada vez que acabes una serie. Ejemplo: 3 series de 10 son poner 10 y pulsar al acabar cada serie, 3 veces en total.</p>';
+  h += seriesDeHoy(tipo);
   return h;
 }
 
-function vistaListo(tipo, detalle, extra) {
+function vistaListo(tipo, detalle, extra, mas) {
   const sig = siguiente(tipo);
   let h = '<div class="listo"><div class="marca">✓</div><h1>¡Muy bien, Pater!</h1>' +
     '<p class="detalle">' + detalle + '</p>' + (extra ? '<p class="extra">' + extra + '</p>' : '') + '</div>';
   if (sig) h += boton('▶ Ahora: ' + EJ[sig].icono + ' ' + EJ[sig].nombre, 'abrir', 'verde grande', ' data-tipo="' + sig + '"');
   else h += '<p class="detalle" style="text-align:center">¡Hoy está todo hecho! 🎉</p>';
+  h += mas || '';
   h += boton('Al inicio', 'inicio', 'claro centro');
   return h;
 }
@@ -297,7 +363,7 @@ function vistaProgreso() {
   const minutos = rs.filter(r => r.tipo === 'bici').reduce((s, r) => s + r.min, 0);
   const colgadas = rs.filter(r => r.tipo === 'barra').map(r => r.seg);
   const mejor = colgadas.length ? Math.max(...colgadas) : 0;
-  const reps = rs.filter(r => EJ[r.tipo].fuerza).reduce((s, r) => s + r.reps, 0);
+  const reps = contables(rs).filter(r => EJ[r.tipo].fuerza).reduce((s, r) => s + r.reps, 0);
 
   let h = volver() + '<h1>⭐ Mi progreso</h1>';
   h += '<div class="mensaje">' + animo(dias, minutos, mejor, reps) + '</div>';
@@ -312,7 +378,7 @@ function vistaProgreso() {
   h += '<h2>Minutos de bici o paseo por semana</h2>' +
     grafica(ss, porSemana(x => x.filter(r => r.tipo === 'bici').reduce((s, r) => s + r.min, 0)), 'minutos');
   h += '<h2>Repeticiones por semana</h2>' +
-    grafica(ss, porSemana(x => x.filter(r => EJ[r.tipo].fuerza).reduce((s, r) => s + r.reps, 0)), 'repeticiones');
+    grafica(ss, porSemana(x => contables(x).filter(r => EJ[r.tipo].fuerza).reduce((s, r) => s + r.reps, 0)), 'repeticiones');
   h += '<h2>Mejor colgada de cada semana</h2>' +
     grafica(ss, porSemana(x => x.filter(r => r.tipo === 'barra').reduce((m, r) => Math.max(m, r.seg), 0)), 'segundos');
   h += boton('Al inicio', 'inicio', 'claro centro');
@@ -380,21 +446,55 @@ function resumen(desde) {
   l.push('🚲 Bici o paseo: ' + plural(diasDe(bici), 'día', 'días') + ', ' + bici.reduce((s, r) => s + r.min, 0) + ' minutos');
   const barra = de('barra');
   l.push('🙌 Colgarse: ' + plural(barra.length, 'vez', 'veces') + (barra.length ? ', la mejor de ' + Math.max(...barra.map(r => r.seg)) + ' segundos' : ''));
+  const corto = d => new Date(d).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' }).replace('.', '');
+  const revisar = [];
+  let hayCarta = false;
   for (const t of FUERZA) {
+    const e = EJ[t];
     const x = de(t);
-    const kilos = x.filter(r => r.kg).map(r => r.kg);
-    const n = series(x), reps = x.reduce((s, r) => s + r.reps, 0);
-    l.push(EJ[t].icono + ' ' + EJ[t].nombre + ': ' + (n ? plural(n, 'serie', 'series') + ', ' : '') +
-      reps + ' repeticiones' + (kilos.length ? ' (' + kg(Math.max(...kilos)) + ')' : ''));
+    l.push('');
+    if (!x.length) { l.push(e.icono + ' ' + e.nombre + ': nada esta semana'); continue; }
+    const app = deApp(x);
+    const kilos = app.filter(r => r.kg).map(r => r.kg);
+    l.push(e.icono + ' ' + e.nombre + ' (objetivo ' + e.series + ' series de ' + e.min + '-' + e.max + ')' +
+      (kilos.length ? ', ' + kg(Math.max(...kilos)) : '') + ':');
+    for (const d of [...new Set(x.map(r => inicioDia(r.t)))].sort((a, b) => a - b)) {
+      const delD = x.filter(r => mismoDia(r.t, d));
+      const enApp = deApp(delD);
+      if (enApp.length) {
+        l.push('· ' + corto(d) + ': ' + listaReps(enApp) + (enApp.length >= e.series ? ' ✓' : ' (' + enApp.length + ' de ' + e.series + ')'));
+      }
+      for (const c of delD.filter(deCarta)) {
+        hayCarta = true;
+        if (solapada(c)) {
+          revisar.push(corto(d) + ', ' + e.nombre.toLowerCase() + ': la carta dice ' + c.reps + ' en total y en la app hay ' +
+            listaReps(enApp) + '. No los sumo.');
+        } else {
+          l.push('· ' + corto(d) + ': ' + c.reps + ' en total, de la carta (sin series)');
+        }
+      }
+    }
   }
 
-  let completos = 0;
+  let completos = 0, soloCarta = 0;
   for (let d = desde; d < hasta; d = masDias(d, 1)) {
-    if (FUERZA.every(t => completa(rs.filter(r => r.tipo === t && mismoDia(r.t, d))))) completos++;
+    const delD = t => rs.filter(r => r.tipo === t && mismoDia(r.t, d));
+    if (FUERZA.every(t => completa(t, delD(t)))) completos++;
+    else if (FUERZA.some(t => delD(t).length) && FUERZA.every(t => delD(t).every(deCarta))) soloCarta++;
   }
   l.push('');
   l.push('Fuerza con todas las series: ' + plural(completos, 'día', 'días') + ' de ' + DIAS_FUERZA + (completos >= DIAS_FUERZA ? ' ✓' : ''));
+  if (soloCarta) l.push('Fuerza apuntada solo desde la carta, sin series: ' + plural(soloCarta, 'día', 'días'));
   l.push('Días con ejercicio: ' + diasDe(rs));
+  if (revisar.length) {
+    l.push('');
+    l.push('⚠ Para revisar (puede estar repetido):');
+    revisar.forEach(t => l.push('· ' + t));
+  }
+  if (hayCarta) {
+    l.push('');
+    l.push('"De la carta": lo que conté por carta y se apuntó a mano, en total. Lo demás lo guardé con los botones, serie a serie.');
+  }
   return l.join('\n');
 }
 
@@ -417,11 +517,44 @@ const capa = document.getElementById('capa');
 function abrirVentana(html) { capa.innerHTML = '<div class="ventana">' + html + '</div>'; capa.hidden = false; }
 function cerrarVentana() { capa.hidden = true; capa.innerHTML = ''; }
 
+// Deshacer solo toca lo guardado con los botones; lo de la carta lo revisa Nando.
+function ultimoDeApp() {
+  return deApp(D.registros).reduce((u, r) => (!u || r.t > u.t ? r : u), null);
+}
+
 function preguntarDeshacer() {
-  const r = D.registros[D.registros.length - 1];
+  const r = ultimoDeApp();
   if (!r) { avisar('No hay nada que deshacer'); return; }
+  pedirBorrar(r);
+}
+
+function pedirBorrar(r) {
+  estado.borrar = r.id;
   abrirVentana('<h1>¿Borrar esto?</h1><p class="borrar">' + describir(r) + '<br><small>' + cuando(r.t) + '</small></p>' +
     boton('Sí, borrar', 'borrar', 'rojo centro') + boton('No', 'cerrar', 'centro'));
+}
+
+function ventanaCorregir() {
+  const c = estado.corrigiendo;
+  const r = D.registros.find(x => x.id === c.id);
+  const n = deApp(deHoy(r.tipo)).indexOf(r) + 1;
+  abrirVentana('<h1>Cambiar la serie ' + n + '</h1><p>' + EJ[r.tipo].nombre + '. Pon las repeticiones que hiciste en esa serie.</p>' +
+    '<div class="contador"><button data-accion="reps-corregir" data-paso="-1" aria-label="Menos">−</button>' +
+    '<span class="valor">' + c.reps + '</span>' +
+    '<button data-accion="reps-corregir" data-paso="1" aria-label="Más">+</button></div>' +
+    boton('✓ Guardar el cambio', 'guardar-cambio', 'verde centro') + boton('Cancelar', 'cerrar', 'claro centro'));
+}
+
+function guardarSerie(tipo) {
+  const r = { tipo, reps: estado.reps, origen: 'app' };
+  if (EJ[tipo].kilos && D.kilos > 0) r.kg = D.kilos;
+  D.reps[tipo] = estado.reps;
+  const antes = hecho(tipo);
+  apuntar(r);
+  estado.guardada = r.id;
+  callar();
+  if (!antes && hecho(tipo)) estado.listo = true;
+  pintar();
 }
 
 let avisoTimer;
@@ -449,12 +582,48 @@ const acciones = {
   deshacer: preguntarDeshacer,
   cerrar: cerrarVentana,
   borrar() {
-    D.registros.pop();
-    guardar();
+    const i = D.registros.findIndex(r => r.id === estado.borrar);
+    if (i >= 0 && !deCarta(D.registros[i])) {
+      if (estado.guardada === estado.borrar) estado.guardada = null;
+      D.registros.splice(i, 1);
+      guardar();
+      avisar('Borrado');
+    }
+    estado.borrar = null;
     cerrarVentana();
-    avisar('Borrado');
     pintar();
   },
+  quitar(el) {
+    const r = D.registros.find(x => x.id === el.dataset.id);
+    if (r) pedirBorrar(r);
+  },
+  corregir(el) {
+    const r = D.registros.find(x => x.id === el.dataset.id);
+    if (!r) return;
+    estado.corrigiendo = { id: r.id, reps: r.reps };
+    ventanaCorregir();
+  },
+  'reps-corregir'(el) {
+    const c = estado.corrigiendo;
+    c.reps = Math.min(50, Math.max(1, c.reps + Number(el.dataset.paso)));
+    ventanaCorregir();
+  },
+  'guardar-cambio'() {
+    const c = estado.corrigiendo;
+    const r = c && D.registros.find(x => x.id === c.id);
+    if (r) {
+      r.reps = c.reps;
+      r.corregido = Date.now();
+      D.reps[r.tipo] = estado.reps = c.reps;   // la siguiente serie parte del número bueno
+      guardar();
+      estado.guardada = r.id;
+    }
+    estado.corrigiendo = null;
+    cerrarVentana();
+    pintar();
+  },
+  'ver-series'() { estado.listo = false; pintar(); },
+  'serie-grande'(el) { cerrarVentana(); guardarSerie(el.dataset.tipo); },
   reps(el) {
     estado.reps = Math.min(50, Math.max(1, estado.reps + Number(el.dataset.paso)));
     pintar();
@@ -465,15 +634,20 @@ const acciones = {
     pintar();
   },
   serie(el) {
-    const tipo = el.dataset.tipo;
-    const r = { tipo, reps: estado.reps };
-    if (EJ[tipo].kilos && D.kilos > 0) r.kg = D.kilos;
-    D.reps[tipo] = estado.reps;
-    const antes = hecho(tipo);
-    apuntar(r);
-    if (!antes && hecho(tipo)) { estado.listo = true; callar(); }
-    else avisar('✓ Serie ' + series(deHoy(tipo)) + ' guardada');
-    pintar();
+    const tipo = el.dataset.tipo, e = EJ[tipo];
+    // Dos toques seguidos no son dos series: nadie acaba una serie en 3 segundos.
+    const ultimo = deApp(deHoy(tipo)).pop();
+    if (ultimo && Date.now() - ultimo.t < 3000) { avisar('Ya estaba guardada. Pulsa al acabar la siguiente serie'); return; }
+    // Muchas más de las que pide una serie suele ser el total de todo el ejercicio: se pregunta, no se impide.
+    if (estado.reps > e.max + Math.ceil(e.max / 2)) {
+      abrirVentana('<h1>¿' + estado.reps + ' repeticiones en una sola serie?</h1>' +
+        '<p>Este número es para <b>una serie</b>. Si hiciste, por ejemplo, 2 series de ' + Math.round(estado.reps / 2) +
+        ', guarda ' + Math.round(estado.reps / 2) + ' ahora y otra vez ' + Math.round(estado.reps / 2) + ' después.</p>' +
+        boton('No, cambiar el número', 'cerrar', 'verde centro') +
+        boton('Sí, fueron ' + estado.reps + ' seguidas', 'serie-grande', 'claro centro', ' data-tipo="' + tipo + '"'));
+      return;
+    }
+    guardarSerie(tipo);
   },
   empezar(el) {
     D.crono[el.dataset.tipo] = Date.now();
@@ -582,8 +756,25 @@ async function instalar() {
 
 // ---------- Arranque ----------
 
+// Si llega una versión nueva, se recarga al volver al inicio, nunca a mitad de una serie.
+// Recargar no borra nada: los registros están en localStorage.
+var versionNueva = false;
+function recargarSiToca() {
+  if (versionNueva && ruta() === 'inicio' && capa.hidden) { versionNueva = false; location.reload(); }
+}
+
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+  const habiaVersion = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!habiaVersion) return;
+    versionNueva = true;
+    recargarSiToca();
+  });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(reg => {
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update().catch(() => {}); });
+    }).catch(() => {});
+  });
 }
 
 pintar();
